@@ -9,6 +9,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/gcc-4.9:"
 
 #SRC_URI += "file://"
 
+EXTRA_OECONF_INITIAL_append := "--disable-libada"
+
 # TODO:
 #  shared libs
 #  multilib
