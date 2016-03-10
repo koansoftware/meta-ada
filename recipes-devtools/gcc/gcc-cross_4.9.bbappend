@@ -4,6 +4,8 @@ ADA ?= ",ada"
 
 LANGUAGES_append := "${ADA}"
 
+EXTRA_OECONF_append := "--disable-libada"
+
 # TODO:
 #  shared libs
 #  multilib
