@@ -1,3 +1,41 @@
+IMPORTANT!!
+-----------
+
+I was looking into updating this layer to Jethro. Turns out this is harder than it used to be as there seems to have
+been a number of changes to how Yocto builds it's toolchain.
+
+Currently the jethro branch will build and install, correctly:
+
+1) gnat1, the actual GNAT compiler binary into libexec.
+2) gnatbind, the GNAT binder binary into bin.
+
+The links that it sets up will also be created.
+
+They no longer build libstdc++ inside ```gcc-cross-<arch>```, in fact they have a patch to disable it altogether. The
+GNAT tools (```make gnattools```) links with this library for some unknown reason. Does this mean we need to disable
+this lib in that part of the build? Currently, gnattools and libada are disabled in the gcc-cross recipe.
+
+I looked at making gnattools and libada inside the gcc-runtime recipe, this doesn't work as the gnattools target calls
+a recursive make in the base gcc directory, which isn't there. Also, in this recipe, it will build libada, but it'll
+only give a static library for some unknown reason, it should give shared and static versions so they can be installed
+side by side.
+
+An alternative approach is the create a gnat recipe which completes the toolchain, by requiring the gcc*.inc files and
+configuring as if we were building the full toolchain with ```--enable-libada```, but only build by calling
+```make -C gcc gnatlib_and_tools```, then installing this as per usual.
+
+Following the successful build of libada and gnattools, we need to build libgnat_util, preferably from the build gcc
+sources. This could be done in the gcc-cross recipe by archiving up all the object files mentioned in gnat_util's
+MANIFEST.gnat_util file, including the version.o from the gcc directory, as this contains the version symbol required
+by gnatvsn package. By doing this, we avoid having to provide dummy files as is usually done and we can get real version
+information from the tools.
+
+Everything after the above is not as difficult, as it's a matter of providing recipes for the various packages, AdaCore's
+and other people's work.
+
+If you want Ada support in Yocto now and in the future, please add you comments to [this issue](https://github.com/Lucretia/meta-ada/issues/2),
+don't create any new ones as I'd like to keep it all in one place. If it needs to be separated I'll do that.
+
 Ada layer for Yocto
 -------------------
 
@@ -66,4 +104,3 @@ IMAGE_INSTALL_append = " hello"
 GPR_PROJECT_PATH = "${STAGING_LIBDIR}/ada/libhello"
 #GPR_PROJECT_PATH .= ":${STAGING_LIBDIR}/ada/<project name>"
 export GPR_PROJECT_PATH
-
