@@ -3,8 +3,8 @@
 This adds support for building Ada programs under Yocto. This is a work in
 progress and more Ada libs will be added in future.
 
-The "thud" branch is an attempt to update this meta layer for Yocto 2.6.3, thud
-to GCC 7.3 and 8.2. I have not been able to build the meta-toolchain thus far,
+The "warrior" branch is an attempt to update this meta layer for Yocto 2.7.1 and
+to GCC 8.3. I have not been able to build the meta-toolchain thus far,
 this could be an issue with my "system" compiler, which isn't a system compiler,
 but one I built using [free-ada](https://github.com/Lucretia/free-ada).
 
