@@ -2,7 +2,7 @@ SUMMARY = "Runtime libraries from GCC/GNAT"
 
 LICENSE = "GPL-3.0-with-GCC-exception"
 
-PACKAGES = "\
+PACKAGES += "\
     gnat-dev \
     gnat-staticdev \
     source \
